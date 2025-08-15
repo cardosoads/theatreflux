@@ -3,18 +3,41 @@
 # Script de Deploy para TheatreFlux na Vercel
 # Execute este script antes do primeiro deploy
 
-echo "🚀 Preparando TheatreFlux para deploy na Vercel..."
+echo "🚀 Preparando projeto TheatreFlux para deploy na Vercel..."
 
-# Verificar se as dependências estão instaladas
-echo "📦 Verificando dependências..."
-if [ ! -d "vendor" ]; then
-    echo "Instalando dependências do Composer..."
-    composer install --no-dev --optimize-autoloader
+# Verificar se o Composer está instalado
+if ! command -v composer &> /dev/null; then
+    echo "❌ Composer não encontrado. Instale o Composer primeiro."
+    exit 1
 fi
 
-if [ ! -d "node_modules" ]; then
-    echo "Instalando dependências do NPM..."
-    npm ci
+# Verificar se o Node.js está instalado
+if ! command -v node &> /dev/null; then
+    echo "❌ Node.js não encontrado. Instale o Node.js primeiro."
+    exit 1
+fi
+
+echo "🧹 Limpando cache do Composer..."
+composer clear-cache
+
+echo "📦 Instalando dependências do Composer (otimizado para Vercel)..."
+composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+if [ $? -ne 0 ]; then
+    echo "❌ Erro ao instalar dependências do Composer"
+    echo "💡 Tente: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --ignore-platform-reqs"
+    exit 1
+fi
+
+echo "⚡ Gerando autoloader otimizado..."
+composer dump-autoload --optimize --no-dev
+
+echo "📦 Instalando dependências do NPM..."
+npm ci
+
+if [ $? -ne 0 ]; then
+    echo "❌ Erro ao instalar dependências do NPM"
+    exit 1
 fi
 
 # Gerar chave da aplicação se não existir

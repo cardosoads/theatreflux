@@ -2,7 +2,8 @@
   "version": 2,
   "functions": {
     "api/index.php": {
-      "runtime": "vercel-php@0.6.0"
+      "runtime": "vercel-php@0.7.0",
+      "maxDuration": 30
     }
   },
   "routes": [
@@ -37,10 +38,14 @@
   },
   "build": {
     "env": {
-      "NODE_VERSION": "18"
+      "NODE_VERSION": "18",
+      "PHP_VERSION": "8.2",
+      "COMPOSER_CACHE_DIR": "/tmp/.composer",
+      "COMPOSER_PROCESS_TIMEOUT": "600",
+      "COMPOSER_MEMORY_LIMIT": "512M"
     }
   },
   "buildCommand": "npm run build",
   "outputDirectory": "public",
-  "installCommand": "composer install --no-dev --optimize-autoloader && npm ci"
+  "installCommand": "composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-progress && npm ci"
 }

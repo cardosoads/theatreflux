@@ -1,18 +1,41 @@
 # Script de Deploy para TheatreFlux na Vercel (PowerShell)
 # Execute este script antes do primeiro deploy
 
-Write-Host "🚀 Preparando TheatreFlux para deploy na Vercel..." -ForegroundColor Green
+Write-Host "🚀 Preparando projeto TheatreFlux para deploy na Vercel..." -ForegroundColor Green
 
-# Verificar se as dependências estão instaladas
-Write-Host "📦 Verificando dependências..." -ForegroundColor Yellow
-if (-not (Test-Path "vendor")) {
-    Write-Host "Instalando dependências do Composer..." -ForegroundColor Cyan
-    composer install --no-dev --optimize-autoloader
+# Verificar se o Composer está instalado
+if (-not (Get-Command composer -ErrorAction SilentlyContinue)) {
+    Write-Host "❌ Composer não encontrado. Instale o Composer primeiro." -ForegroundColor Red
+    exit 1
 }
 
-if (-not (Test-Path "node_modules")) {
-    Write-Host "Instalando dependências do NPM..." -ForegroundColor Cyan
-    npm ci
+# Verificar se o Node.js está instalado
+if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+    Write-Host "❌ Node.js não encontrado. Instale o Node.js primeiro." -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "🧹 Limpando cache do Composer..." -ForegroundColor Yellow
+composer clear-cache
+
+Write-Host "📦 Instalando dependências do Composer (otimizado para Vercel)..." -ForegroundColor Yellow
+composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "❌ Erro ao instalar dependências do Composer" -ForegroundColor Red
+    Write-Host "💡 Tente: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --ignore-platform-reqs" -ForegroundColor Cyan
+    exit 1
+}
+
+Write-Host "⚡ Gerando autoloader otimizado..." -ForegroundColor Yellow
+composer dump-autoload --optimize --no-dev
+
+Write-Host "📦 Instalando dependências do NPM..." -ForegroundColor Yellow
+npm ci
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "❌ Erro ao instalar dependências do NPM" -ForegroundColor Red
+    exit 1
 }
 
 # Gerar chave da aplicação se não existir
