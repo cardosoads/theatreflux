@@ -37,8 +37,9 @@
     },
     "scripts": {
         "post-autoload-dump": [
-            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi || true"
+            "@php artisan config:clear",
+            "@php artisan clear-compiled",
+            "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
@@ -66,19 +67,13 @@
         }
     },
     "config": {
-        "platform": {
-            "php": "8.2"
-        },
-        "platform-check": false,
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
-        },
-        "process-timeout": 600,
-        "cache-dir": "/tmp/.composer"
+        }
     },
     "minimum-stability": "stable",
     "prefer-stable": true

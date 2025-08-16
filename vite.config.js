@@ -12,24 +12,15 @@ export default defineConfig({
     ],
     build: {
         target: 'es2022',
-        outDir: 'public/build',
-        emptyOutDir: true,
         rollupOptions: {
             output: {
                 manualChunks: undefined,
             }
-        },
-        minify: 'terser',
-        sourcemap: false
+        }
     },
     resolve: {
         alias: {
             vue: 'vue/dist/vue.esm-bundler.js'
-        }
-    },
-    server: {
-        hmr: {
-            host: 'localhost'
         }
     }
 });
