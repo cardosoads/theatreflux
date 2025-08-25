@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TheatreFlux - Editor de Fluxos Teatrais</title>
+    <title>Marca e Deixa - Editor de Fluxos Teatrais</title>
     
     <!-- Open Sans Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,13 +63,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
                     </div>
-                    <span class="text-xl font-bold text-primary">TheatreFlux</span>
+                    <span class="text-xl font-bold text-primary">Marca e Deixa</span>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#hero" class="text-secondary hover:text-primary transition-colors font-medium">Início</a>
                     <a href="#features" class="text-secondary hover:text-primary transition-colors font-medium">Recursos</a>
                     <a href="#about" class="text-secondary hover:text-primary transition-colors font-medium">Sobre</a>
-                    <a href="#wireframes" class="text-secondary hover:text-primary transition-colors font-medium">Exemplos</a>
+                    <a href="#wireframes" class="text-secondary hover:text-primary transition-colors font-medium">FAQ</a>
                     <a href="#contact" class="text-secondary hover:text-primary transition-colors font-medium">Contato</a>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -90,7 +90,7 @@
                         <span class="text-secondary">Incríveis</span>
                     </h1>
                     <p class="text-xl text-secondary mb-8 leading-relaxed">
-                        TheatreFlux é a plataforma definitiva para criação, edição e gerenciamento de fluxos teatrais. 
+                        Marca e Deixa é a plataforma definitiva para criação, edição e gerenciamento de fluxos teatrais. 
                         Transforme suas ideias em espetáculos visuais interativos.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4">
@@ -125,7 +125,7 @@
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Recursos Poderosos</h2>
                 <p class="text-xl text-secondary max-w-3xl mx-auto">
-                    Descubra as ferramentas que tornam o TheatreFlux a escolha ideal para profissionais do teatro
+                    Descubra as ferramentas que tornam o Marca e Deixa a escolha ideal para profissionais do teatro
                 </p>
             </div>
             
@@ -216,9 +216,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-6">Sobre o TheatreFlux</h2>
+                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-6">Sobre o Marca e Deixa</h2>
                     <p class="text-lg text-secondary mb-6 leading-relaxed">
-                        Nascido da paixão pelo teatro e pela tecnologia, o TheatreFlux revoluciona a forma como 
+                        Nascido da paixão pelo teatro e pela tecnologia, o Marca e Deixa revoluciona a forma como 
                         profissionais do teatro criam e gerenciam seus fluxos de trabalho.
                     </p>
                     <p class="text-lg text-secondary mb-8 leading-relaxed">
@@ -270,7 +270,7 @@
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Perguntas Frequentes</h2>
                 <p class="text-xl text-secondary max-w-3xl mx-auto">
-                    Tire suas dúvidas sobre o TheatreFlux e descubra como nossa plataforma pode transformar seus fluxos de trabalho
+                    Tire suas dúvidas sobre o Marca e Deixa e descubra como nossa plataforma pode transformar seus fluxos de trabalho
                 </p>
             </div>
             
@@ -278,13 +278,13 @@
                 <!-- FAQ Item 1 -->
                 <div class="faq-item bg-light rounded-2xl p-6 border border-tertiary/20 hover:border-secondary/30 transition-all duration-300">
                     <button class="faq-question w-full text-left flex justify-between items-center" onclick="toggleFAQ(this)">
-                        <h3 class="text-lg font-semibold text-primary pr-4">O que é o TheatreFlux e como ele funciona?</h3>
+                        <h3 class="text-lg font-semibold text-primary pr-4">O que é o Marca e Deixa e como ele funciona?</h3>
                         <svg class="faq-icon w-6 h-6 text-secondary transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div class="faq-answer mt-4 text-secondary leading-relaxed hidden">
-                        <p>O TheatreFlux é uma plataforma inovadora de criação de fluxos visuais que permite criar, editar e gerenciar workflows de forma intuitiva. Com nossa interface drag-and-drop, você pode conectar elementos, definir lógicas complexas e visualizar todo o processo em tempo real.</p>
+                        <p>O Marca e Deixa é uma plataforma inovadora de criação de fluxos visuais que permite criar, editar e gerenciar workflows de forma intuitiva. Com nossa interface drag-and-drop, você pode conectar elementos, definir lógicas complexas e visualizar todo o processo em tempo real.</p>
                     </div>
                 </div>
 
@@ -297,7 +297,7 @@
                         </svg>
                     </button>
                     <div class="faq-answer mt-4 text-secondary leading-relaxed hidden">
-                        <p>Não! O TheatreFlux foi desenvolvido para ser acessível a todos os níveis de usuários. Nossa interface visual e intuitiva permite que qualquer pessoa crie fluxos complexos sem necessidade de programação. Oferecemos também tutoriais e documentação completa para ajudar você a começar.</p>
+                        <p>Não! O Marca e Deixa foi desenvolvido para ser acessível a todos os níveis de usuários. Nossa interface visual e intuitiva permite que qualquer pessoa crie fluxos complexos sem necessidade de programação. Oferecemos também tutoriais e documentação completa para ajudar você a começar.</p>
                     </div>
                 </div>
 
@@ -310,7 +310,7 @@
                         </svg>
                     </button>
                     <div class="faq-answer mt-4 text-secondary leading-relaxed hidden">
-                        <p>Com o TheatreFlux você pode criar diversos tipos de fluxos: processos de negócio, workflows de aprovação, automações, diagramas de decisão, mapas de jornada do usuário, fluxogramas técnicos e muito mais. A plataforma é flexível e se adapta às suas necessidades específicas.</p>
+                        <p>Com o Marca e Deixa você pode criar diversos tipos de fluxos: processos de negócio, workflows de aprovação, automações, diagramas de decisão, mapas de jornada do usuário, fluxogramas técnicos e muito mais. A plataforma é flexível e se adapta às suas necessidades específicas.</p>
                     </div>
                 </div>
 
@@ -323,7 +323,7 @@
                         </svg>
                     </button>
                     <div class="faq-answer mt-4 text-secondary leading-relaxed hidden">
-                        <p>Sim! O TheatreFlux oferece colaboração em tempo real, permitindo que múltiplos usuários trabalhem no mesmo projeto simultaneamente. Você pode ver as alterações dos colegas instantaneamente, deixar comentários, e gerenciar permissões de acesso para diferentes membros da equipe.</p>
+                        <p>Sim! O Marca e Deixa oferece colaboração em tempo real, permitindo que múltiplos usuários trabalhem no mesmo projeto simultaneamente. Você pode ver as alterações dos colegas instantaneamente, deixar comentários, e gerenciar permissões de acesso para diferentes membros da equipe.</p>
                     </div>
                 </div>
 
@@ -336,7 +336,7 @@
                         </svg>
                     </button>
                     <div class="faq-answer mt-4 text-secondary leading-relaxed hidden">
-                        <p>O TheatreFlux oferece múltiplas opções de exportação: PNG, SVG, PDF para documentação, e JSON para integrações técnicas. Também fornecemos APIs robustas para integrar seus fluxos com outras ferramentas e sistemas da sua empresa, garantindo total flexibilidade no seu workflow.</p>
+                        <p>O Marca e Deixa oferece múltiplas opções de exportação: PNG, SVG, PDF para documentação, e JSON para integrações técnicas. Também fornecemos APIs robustas para integrar seus fluxos com outras ferramentas e sistemas da sua empresa, garantindo total flexibilidade no seu workflow.</p>
                     </div>
                 </div>
 
@@ -391,7 +391,7 @@
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">Pronto para Começar?</h2>
                 <p class="text-xl text-light max-w-3xl mx-auto">
-                    Junte-se a centenas de profissionais que já transformaram seus fluxos teatrais com o TheatreFlux
+                    Junte-se a centenas de profissionais que já transformaram seus fluxos teatrais com o Marca e Deixa
                 </p>
             </div>
             
@@ -407,7 +407,7 @@
                             </div>
                             <div>
                                 <div class="font-semibold">Email</div>
-                                <div class="text-light">contato@theatreflux.com</div>
+                                <div class="text-light">contato@marcaedeixa.com</div>
                             </div>
                         </div>
                         <div class="flex items-center space-x-4">
@@ -470,7 +470,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                             </svg>
                         </div>
-                        <span class="text-xl font-bold text-white">TheatreFlux</span>
+                        <span class="text-xl font-bold text-white">Marca e Deixa</span>
                     </div>
                     <p class="text-sm leading-relaxed">
                         Transformando ideias teatrais em realidade através da tecnologia.
@@ -509,7 +509,7 @@
             </div>
             
             <div class="border-t border-tertiary mt-8 pt-8 text-center text-sm">
-                <p>&copy; 2025 TheatreFlux. Todos os direitos reservados.</p>
+                <p>&copy; 2025 Marca e Deixa. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
@@ -519,7 +519,7 @@
         // Mobile menu toggle (if needed)
         document.addEventListener('DOMContentLoaded', function() {
             // Add any interactive functionality here
-            console.log('TheatreFlux Landing Page loaded successfully!');
+            console.log('Marca e Deixa Landing Page loaded successfully!');
         });
     </script>
 </body>

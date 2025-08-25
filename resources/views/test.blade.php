@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheatreFlux - Teste de Melhorias</title>
+    <title>Marca e Deixa - Teste de Melhorias</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-100">
@@ -14,7 +14,7 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between items-center py-4">
                         <div class="flex items-center">
-                            <h1 class="text-2xl font-bold text-gray-900">TheatreFlux</h1>
+                            <h1 class="text-2xl font-bold text-gray-900">Marca e Deixa</h1>
                             <span class="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">Teste</span>
                         </div>
                         <nav class="flex space-x-4">
@@ -31,7 +31,7 @@
                 <div class="mb-8">
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">Teste de Melhorias</h2>
                     <p class="text-gray-600 mb-6">
-                        Esta página testa as melhorias implementadas no TheatreFlux, incluindo:
+                        Esta página testa as melhorias implementadas no Marca e Deixa, incluindo:
                     </p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">

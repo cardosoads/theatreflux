@@ -16,7 +16,7 @@ class AdminUserSeeder extends Seeder
     {
         // Criar usuário administrador padrão
         User::firstOrCreate(
-            ['email' => 'admin@theatreflux.com'],
+            ['email' => 'admin@marcaedeixa.com'],
             [
                 'name' => 'Administrador',
                 'password' => Hash::make('admin123'),
@@ -27,7 +27,7 @@ class AdminUserSeeder extends Seeder
 
         // Criar usuário comum para teste
         User::firstOrCreate(
-            ['email' => 'user@theatreflux.com'],
+            ['email' => 'user@marcaedeixa.com'],
             [
                 'name' => 'Usuário Teste',
                 'password' => Hash::make('user123'),
@@ -37,7 +37,7 @@ class AdminUserSeeder extends Seeder
         );
 
         $this->command->info('Usuários criados com sucesso!');
-        $this->command->info('Admin: admin@theatreflux.com / admin123');
-        $this->command->info('User: user@theatreflux.com / user123');
+        $this->command->info('Admin: admin@marcaedeixa.com / admin123');
+        $this->command->info('User: user@marcaedeixa.com / user123');
     }
 }

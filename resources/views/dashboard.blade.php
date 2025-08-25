@@ -41,19 +41,23 @@
                 
                 <!-- Right side - User menu -->
                 <div class="flex items-center space-x-4">
-                    <span class="text-white text-sm">Olá, Usuario1!</span>
+                    <span class="text-white text-sm">Olá, {{ Auth::user()->name }}!</span>
                     <div class="relative">
                         <button class="flex items-center space-x-2 text-white hover:bg-gray-600 px-3 py-2 rounded-md transition-colors duration-200" onclick="toggleUserMenu()">
-                            <div class="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                                </svg>
+                            <div class="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center overflow-hidden">
+                                @if(Auth::user()->profile_image)
+                                    <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" alt="Foto de perfil" class="w-full h-full object-cover rounded-full">
+                                @else
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                    </svg>
+                                @endif
                             </div>
                         </button>
                         
                         <!-- Dropdown menu -->
                         <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-200">
-                            <a href="#" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150">Configurações de perfil</a>
+                            <a href="{{ route('profile.edit') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150">Configurações de perfil</a>
                             <a href="#" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150">Plano premium</a>
                             <div class="border-t border-gray-100"></div>
                             <form method="POST" action="{{ route('logout') }}" class="block">

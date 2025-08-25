@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // Rota pública inicial
@@ -25,6 +26,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/editor', function () {
         return view('editor');
     })->name('editor');
+    
+    // Rotas de perfil
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/image', [ProfileController::class, 'deleteImage'])->name('profile.delete-image');
 });
 
 // Rotas administrativas - apenas para admins

@@ -143,7 +143,7 @@
         <!-- Footer -->
         <div class="text-center mt-4">
             <p class="text-xs text-tertiary">
-                © 2024 TheatreFlux. Todos os direitos reservados.
+                © 2024 Marca e Deixa. Todos os direitos reservados.
             </p>
         </div>
     </div>
