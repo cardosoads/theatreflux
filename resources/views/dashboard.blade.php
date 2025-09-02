@@ -130,13 +130,14 @@
         
         <!-- Projects Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <!-- Project Card 1 - Hamlet SP -->
-            <div class="project-card group cursor-pointer" onclick="openProject('hamlet-sp')">
+            @forelse($projects as $project)
+            <!-- Project Card - {{ $project->title }} -->
+            <div class="project-card group cursor-pointer" onclick="openProject('{{ $project->id }}')">
                 <div class="relative p-5 h-full flex flex-col justify-between">
                     <!-- Header with Icon -->
                     <div class="flex items-start justify-between mb-4">
                         <div class="relative">
-                            <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300" style="background: linear-gradient(135deg, #242734 0%, #4B5563 100%);">
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300" style="background: linear-gradient(135deg, {{ $loop->index % 5 == 0 ? '#242734, #4B5563' : ($loop->index % 5 == 1 ? '#4B5563, #6B7280' : ($loop->index % 5 == 2 ? '#6B7280, #9CA3AF' : ($loop->index % 5 == 3 ? '#374151, #4B5563' : '#1F2937, #374151'))) }});">
                                 <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                                 </svg>
@@ -147,133 +148,35 @@
                     <!-- Content -->
                     <div class="flex-1 flex flex-col justify-between">
                         <div>
-                            <h3 class="font-semibold mb-1" style="color: var(--primary-dark);">Hamlet SP</h3>
-                            <p class="mb-3" style="color: var(--tertiary-gray);">Tragédia Shakespeariana</p>
+                            <h3 class="font-semibold mb-1" style="color: var(--primary-dark);">{{ $project->title }}</h3>
+                            <p class="mb-3" style="color: var(--tertiary-gray);">{{ $project->description ?? 'Projeto Teatral' }}</p>
                         </div>
                         
                         <!-- Creation Date -->
                         <div class="flex items-center justify-end mt-auto">
-                            <p class="text-sm" style="color: var(--tertiary-gray);">15 Jan, 2024</p>
+                            <p class="text-sm" style="color: var(--tertiary-gray);">{{ $project->updated_at->format('d M, Y') }}</p>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Project Card 2 - Macbeth Rio -->
-            <div class="project-card group cursor-pointer" onclick="openProject('macbeth-rio')">
-                <div class="relative p-5 h-full flex flex-col justify-between">
-                    <!-- Header with Icon -->
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="relative">
-                            <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300" style="background: linear-gradient(135deg, #4B5563 0%, #6B7280 100%);">
-                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="flex-1 flex flex-col justify-between">
-                        <div>
-                            <h3 class="font-semibold mb-1" style="color: var(--primary-dark);">Macbeth Rio</h3>
-                            <p class="mb-3" style="color: var(--tertiary-gray);">Drama Psicológico</p>
-                        </div>
-                        
-                        <!-- Creation Date -->
-                        <div class="flex items-center justify-end mt-auto">
-                            <p class="text-sm" style="color: var(--tertiary-gray);">8 Fev, 2024</p>
-                        </div>
-                    </div>
+            @empty
+            <!-- No Projects Message -->
+            <div class="col-span-full text-center py-12">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
                 </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Nenhum projeto encontrado</h3>
+                <p class="text-gray-600 mb-6">Você ainda não criou nenhum projeto. Comece criando seu primeiro projeto teatral!</p>
+                <button onclick="createNewProject()" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Criar Primeiro Projeto
+                </button>
             </div>
-            
-            <!-- Project Card 3 - Otelo Porto Alegre -->
-            <div class="project-card group cursor-pointer" onclick="openProject('otelo-poa')">
-                <div class="relative p-5 h-full flex flex-col justify-between">
-                    <!-- Header with Icon -->
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="relative">
-                            <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300" style="background: linear-gradient(135deg, #6B7280 0%, #9CA3AF 100%);">
-                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="flex-1 flex flex-col justify-between">
-                        <div>
-                            <h3 class="font-semibold mb-1" style="color: var(--primary-dark);">Otelo Porto Alegre</h3>
-                            <p class="mb-3" style="color: var(--tertiary-gray);">Tragédia do Ciúme</p>
-                        </div>
-                        
-                        <!-- Creation Date -->
-                        <div class="flex items-center justify-end mt-auto">
-                            <p class="text-sm" style="color: var(--tertiary-gray);">22 Mar, 2024</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Project Card 4 - Romeo e Julieta -->
-            <div class="project-card group cursor-pointer" onclick="openProject('romeo-julieta')">
-                <div class="relative p-5 h-full flex flex-col justify-between">
-                    <!-- Header with Icon -->
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="relative">
-                            <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300" style="background: linear-gradient(135deg, #374151 0%, #4B5563 100%);">
-                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="flex-1 flex flex-col justify-between">
-                        <div>
-                            <h3 class="font-semibold mb-1" style="color: var(--primary-dark);">Romeo e Julieta</h3>
-                            <p class="mb-3" style="color: var(--tertiary-gray);">Romance Trágico</p>
-                        </div>
-                        
-                        <!-- Creation Date -->
-                        <div class="flex items-center justify-end mt-auto">
-                            <p class="text-sm" style="color: var(--tertiary-gray);">5 Abr, 2024</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Project Card 5 - A Tempestade -->
-            <div class="project-card group cursor-pointer" onclick="openProject('tempestade')">
-                <div class="relative p-5 h-full flex flex-col justify-between">
-                    <!-- Header with Icon -->
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="relative">
-                            <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300" style="background: linear-gradient(135deg, #1F2937 0%, #374151 100%);">
-                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="flex-1 flex flex-col justify-between">
-                        <div>
-                            <h3 class="font-semibold mb-1" style="color: var(--primary-dark);">A Tempestade</h3>
-                            <p class="mb-3" style="color: var(--tertiary-gray);">Fantasia Mágica</p>
-                        </div>
-                        
-                        <!-- Creation Date -->
-                        <div class="flex items-center justify-end mt-auto">
-                            <p class="text-sm" style="color: var(--tertiary-gray);">12 Mai, 2024</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforelse
             
             <!-- Create New Project Card -->
             <div class="create-project-card group cursor-pointer" onclick="createNewProject()">
@@ -312,13 +215,58 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     </div>
-</div>
 
+    <!-- Modal para Criar Novo Projeto -->
+    <div id="createProjectModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Criar Novo Projeto</h3>
+                <button onclick="closeCreateProjectModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="createProjectForm" onsubmit="handleCreateProject(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label for="projectTitle" class="block text-sm font-medium text-gray-700 mb-1">Nome do Projeto *</label>
+                        <input type="text" id="projectTitle" name="title" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="Ex: Hamlet - Temporada 2025">
+                    </div>
+                    
+                    <div>
+                        <label for="projectDescription" class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+                        <textarea id="projectDescription" name="description" rows="3"
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  placeholder="Descreva brevemente o projeto..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" onclick="closeCreateProjectModal()" 
+                            class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors duration-200">
+                        Cancelar
+                    </button>
+                    <button type="submit" id="createProjectBtn"
+                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200">
+                        <span id="createProjectBtnText">Criar Projeto</span>
+                        <svg id="createProjectSpinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-
-<script>
+    <script>
     let searchTimeout;
     
     function toggleUserMenu() {
@@ -327,13 +275,72 @@
     }
     
     function openProject(projectId) {
-        // Redirect to editor with project
-        window.location.href = '/editor?project=' + projectId;
+        // Redirect to editor with project ID
+        window.location.href = `/editor?project=${projectId}`;
     }
     
     function createNewProject() {
-        // Redirect to editor for new project
-        window.location.href = '/editor';
+        // Open modal for new project
+        document.getElementById('createProjectModal').classList.remove('hidden');
+        document.getElementById('projectTitle').focus();
+    }
+    
+    function closeCreateProjectModal() {
+        document.getElementById('createProjectModal').classList.add('hidden');
+        document.getElementById('createProjectForm').reset();
+    }
+    
+    async function handleCreateProject(event) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const formData = new FormData(form);
+        const title = formData.get('title');
+        const description = formData.get('description');
+        
+        // Show loading state
+        const btn = document.getElementById('createProjectBtn');
+        const btnText = document.getElementById('createProjectBtnText');
+        const spinner = document.getElementById('createProjectSpinner');
+        
+        btn.disabled = true;
+        btnText.textContent = 'Criando...';
+        spinner.classList.remove('hidden');
+        
+        try {
+            // Debug: Verificar se o token CSRF está configurado
+            console.log('CSRF Token:', document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'));
+            console.log('Axios headers:', axios.defaults.headers.common);
+            
+            const response = await axios.post('/api/projects', {
+                title: title,
+                description: description,
+                data: {
+                    scenes: [],
+                    settings: {
+                        canvas: {
+                            width: 1920,
+                            height: 1080
+                        }
+                    }
+                }
+            });
+            
+            if (response.data && response.data.id) {
+                // Redirect to editor with new project ID
+                window.location.href = `/editor?project=${response.data.id}`;
+            } else {
+                throw new Error('Resposta inválida do servidor');
+            }
+        } catch (error) {
+            console.error('Erro ao criar projeto:', error);
+            alert('Erro ao criar projeto. Tente novamente.');
+            
+            // Reset button state
+            btn.disabled = false;
+            btnText.textContent = 'Criar Projeto';
+            spinner.classList.add('hidden');
+        }
     }
     
     function filterProjectsRealTime(searchValue) {
@@ -572,6 +579,24 @@
         
         if (!userButton || !userButton.onclick) {
             userMenu.classList.add('hidden');
+        }
+        
+        // Close create project modal when clicking outside
+        const modal = document.getElementById('createProjectModal');
+        const modalContent = modal.querySelector('.bg-white');
+        
+        if (event.target === modal && !modalContent.contains(event.target)) {
+            closeCreateProjectModal();
+        }
+    });
+    
+    // Close modal with ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('createProjectModal');
+            if (!modal.classList.contains('hidden')) {
+                closeCreateProjectModal();
+            }
         }
     });
 </script>

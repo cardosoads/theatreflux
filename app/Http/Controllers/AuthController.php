@@ -93,7 +93,10 @@ class AuthController extends Controller
      */
     public function dashboard()
     {
-        return view('dashboard');
+        $user = Auth::user();
+        $projects = $user->projects()->orderBy('updated_at', 'desc')->get();
+        
+        return view('dashboard', compact('projects'));
     }
 
     /**

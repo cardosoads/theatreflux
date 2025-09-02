@@ -27,6 +27,11 @@ Route::middleware('auth')->group(function () {
         return view('editor');
     })->name('editor');
     
+    // Editor com projeto específico
+    Route::get('/editor/{project}', function ($project) {
+        return view('editor', ['projectId' => $project]);
+    })->name('editor.project');
+    
     // Rotas de perfil
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

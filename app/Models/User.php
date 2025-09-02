@@ -79,4 +79,12 @@ class User extends Authenticatable
     {
         return $this->role === $role;
     }
+
+    /**
+     * Get the projects for the user.
+     */
+    public function projects()
+    {
+        return $this->hasMany(\App\Models\Project::class);
+    }
 }

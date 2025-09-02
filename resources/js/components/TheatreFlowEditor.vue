@@ -31,7 +31,16 @@
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-5l-2-2H5a2 2 0 00-2 2z"></path>
             </svg>
-            Carregar
+            Carregar Arquivo
+          </button>
+          <button 
+            @click="openProjectsDialog" 
+            class="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+          >
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+            Meus Projetos
           </button>
           <button 
             @click="exportFlow" 
@@ -45,37 +54,48 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
-        <button
-          @click="playScenes"
-          :disabled="isPlaying"
-          class="flex items-center gap-1 px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 disabled:opacity-50"
-        >
-          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z"></path>
-          </svg>
-          Reproduzir
-        </button>
-        <button
-          @click="pausePlay"
-          :disabled="!isPlaying"
-          class="flex items-center gap-1 px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 disabled:opacity-50"
-        >
-          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
-          </svg>
-          Pausar
-        </button>
-        <button
-          @click="stopPlay"
-          :disabled="!isPlaying && !isPaused"
-          class="flex items-center gap-1 px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 disabled:opacity-50"
-        >
-          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M6 6h12v12H6z"></path>
-          </svg>
-          Parar
-        </button>
+      <div class="flex items-center gap-4">
+        <!-- Save Status Component -->
+        <SaveStatus
+          :is-saving="isSaving"
+          :last-saved="lastSaved"
+          :has-unsaved-changes="hasUnsavedChanges"
+          :save-error="saveError"
+          @save="handleManualSave"
+        />
+        
+        <div class="flex items-center gap-2">
+          <button
+            @click="playScenes"
+            :disabled="isPlaying"
+            class="flex items-center gap-1 px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 disabled:opacity-50"
+          >
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"></path>
+            </svg>
+            Reproduzir
+          </button>
+          <button
+            @click="pausePlay"
+            :disabled="!isPlaying"
+            class="flex items-center gap-1 px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 disabled:opacity-50"
+          >
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
+            </svg>
+            Pausar
+          </button>
+          <button
+            @click="stopPlay"
+            :disabled="!isPlaying && !isPaused"
+            class="flex items-center gap-1 px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 disabled:opacity-50"
+          >
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M6 6h12v12H6z"></path>
+            </svg>
+            Parar
+          </button>
+        </div>
       </div>
     </div>
 
@@ -177,17 +197,34 @@
               ref="canvas"
               class="relative bg-white border-2 border-gray-300 shadow-lg"
               :style="{
-                width: `${currentScene.stage.width || 600}px`,
-                height: `${currentScene.stage.height || 400}px`,
+                width: `${currentScene?.stage?.width || 600}px`,
+                height: `${currentScene?.stage?.height || 400}px`,
                 transform: `scale(${zoom / 100}) translate(${canvasOffset.x}px, ${canvasOffset.y}px)`,
                 cursor: selectedTool === 'hand' ? (isPanning ? 'grabbing' : 'grab') : 'crosshair',
-                transformOrigin: 'center center'
+                transformOrigin: 'center center',
+                ...getCanvasStyle(currentScene?.stage)
               }"
             >
+              <!-- Canvas Shape SVG -->
+              <svg 
+                v-if="getCanvasShapeElement(currentScene?.stage)"
+                class="absolute inset-0 pointer-events-none"
+                :width="currentScene?.stage?.width || 600"
+                :height="currentScene?.stage?.height || 400"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+                style="z-index: -1;"
+              >
+                <component 
+                  :is="getCanvasShapeElement(currentScene?.stage).tag"
+                  v-bind="getCanvasShapeElement(currentScene?.stage).attrs"
+                />
+              </svg>
+
               <!-- Stage Background -->
               <div
                 class="absolute inset-0"
-                :style="getStageStyle(currentScene.stage)"
+                :style="getStageStyle(currentScene?.stage)"
               ></div>
 
               <!-- Elements -->
@@ -639,9 +676,9 @@
               <div 
                 v-for="shape in stageShapes" 
                 :key="shape.id"
-                @click="currentScene.stage.shape = shape.id"
+                @click="currentScene?.stage && (currentScene.stage.shape = shape.id)"
                 class="border-2 rounded-lg p-3 cursor-pointer transition-all hover:bg-gray-50"
-                :class="currentScene.stage.shape === shape.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'"
+                :class="currentScene?.stage?.shape === shape.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'"
               >
                 <div class="text-center">
                   <div class="text-2xl mb-1">{{ shape.preview }}</div>
@@ -659,14 +696,14 @@
               <div class="w-32 h-20 mx-auto relative">
                 <div 
                   class="w-full h-full"
-                  :style="getStagePreviewStyle(currentScene.stage)"
+                  :style="getStagePreviewStyle(currentScene?.stage)"
                 ></div>
               </div>
             </div>
           </div>
 
           <!-- Configurações de Cor e Opacidade -->
-          <div class="grid grid-cols-2 gap-4">
+          <div v-if="currentScene?.stage" class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Cor do Palco</label>
               <input
@@ -690,7 +727,7 @@
           </div>
 
           <!-- Dimensões -->
-          <div class="grid grid-cols-2 gap-4">
+          <div v-if="currentScene?.stage" class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Largura</label>
               <input
@@ -718,7 +755,7 @@
           </div>
 
           <!-- Configurações Avançadas -->
-          <div v-if="currentScene.stage.shape === 'ellipse' || currentScene.stage.shape === 'traverse'">
+          <div v-if="currentScene?.stage && (currentScene.stage.shape === 'ellipse' || currentScene.stage.shape === 'traverse')">
             <label class="block text-sm font-medium text-gray-700 mb-2">Configurações Especiais</label>
             <div v-if="currentScene.stage.shape === 'ellipse'">
               <label class="block text-xs text-gray-600 mb-1">Escala Horizontal</label>
@@ -900,10 +937,84 @@
       </div>
     </div>
   </div>
+
+  <!-- Projects Dialog -->
+  <div v-if="showProjectsDialog" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-gray-900">Meus Projetos</h3>
+          <button @click="closeProjectsDialog" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <div class="p-6 overflow-y-auto max-h-[60vh]">
+        <div v-if="loadingProjects" class="flex items-center justify-center py-8">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          <span class="ml-3 text-gray-600">Carregando projetos...</span>
+        </div>
+        
+        <div v-else-if="availableProjects.length === 0" class="text-center py-8">
+          <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+          </svg>
+          <p class="text-gray-500">Nenhum projeto encontrado</p>
+          <p class="text-sm text-gray-400 mt-2">Crie seu primeiro projeto salvando o projeto atual</p>
+        </div>
+        
+        <div v-else class="grid gap-4">
+          <div 
+            v-for="project in availableProjects" 
+            :key="project.id"
+            @click="selectProject(project)"
+            class="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-all"
+          >
+            <div class="flex items-start justify-between">
+              <div class="flex-1">
+                <h4 class="font-medium text-gray-900">{{ project.title }}</h4>
+                <p class="text-sm text-gray-600 mt-1">{{ project.description || 'Sem descrição' }}</p>
+                <div class="flex items-center gap-4 mt-3 text-xs text-gray-500">
+                  <span>{{ project.scenes_count || 0 }} cenas</span>
+                  <span>Atualizado em {{ new Date(project.updated_at).toLocaleDateString('pt-BR') }}</span>
+                </div>
+              </div>
+              <div class="ml-4">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+        <div class="flex justify-end">
+          <button @click="closeProjectsDialog" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+            Fechar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { useAutoSave } from '../composables/useAutoSave'
+import SaveStatus from './SaveStatus.vue'
+
+// Props
+const props = defineProps({
+  initialProjectId: {
+    type: [String, Number],
+    default: null
+  }
+})
 
 // Icon components (simplified SVG icons)
 const MousePointer = { template: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>' }
@@ -925,7 +1036,7 @@ const scenes = ref([
       color: '#8B4513',
       width: 600,
       height: 400,
-      shape: 'rectangle',
+      shape: 'ellipse',
       opacity: 0.8,
       scaleX: 1,
       traverseHeight: 60
@@ -956,6 +1067,57 @@ const speechStyle = ref('normal')
 const speechWidth = ref('120px')
 const speechSize = ref('12px')
 const showSidePanel = ref(false)
+const showProjectsDialog = ref(false)
+const availableProjects = ref([])
+const loadingProjects = ref(false)
+
+// Project data for autosave
+const projectData = computed(() => ({
+  title: 'Projeto Theatre Flux',
+  description: 'Projeto criado no Theatre Flux Editor',
+  scenes: scenes.value.map((scene, index) => ({
+    ...scene,
+    order: index
+  })),
+  settings: {
+    zoom: zoom.value,
+    canvasOffset: canvasOffset.value
+  }
+}))
+
+// AutoSave composable
+const {
+  isSaving,
+  lastSaved,
+  hasUnsavedChanges,
+  saveError,
+  currentProjectId,
+  saveNow,
+  watchForChanges,
+  loadProject,
+  listProjects
+} = useAutoSave({
+  delay: 3000, // 3 segundos
+  enabled: true
+})
+
+// Load project from URL parameter
+const loadProjectFromURL = async () => {
+  const urlParams = new URLSearchParams(window.location.search)
+  const projectId = urlParams.get('project')
+  
+  if (projectId) {
+    try {
+      console.log('Carregando projeto da URL:', projectId)
+      await handleLoadProject(projectId)
+    } catch (error) {
+      console.error('Erro ao carregar projeto da URL:', error)
+      // Remove o parâmetro da URL se houver erro
+      const newUrl = window.location.pathname
+      window.history.replaceState({}, document.title, newUrl)
+    }
+  }
+}
 
 // Speech styles configuration
 const speechStyles = [
@@ -972,6 +1134,9 @@ const canvas = ref(null)
 // Computed
 const currentScene = computed(() => scenes.value[currentSceneIndex.value])
 const allElements = computed(() => {
+  if (!currentScene.value || !currentScene.value.actors || !currentScene.value.objects) {
+    return []
+  }
   return [...currentScene.value.actors, ...currentScene.value.objects].sort((a, b) => a.zIndex - b.zIndex)
 })
 
@@ -1066,7 +1231,7 @@ const addScene = () => {
       ...obj,
       id: Date.now() + Math.random()
     }))] : [],
-    stage: previousScene ? { ...previousScene.stage } : { type: 'proscenium', color: '#8B4513', width: 600, height: 400, shape: 'rectangle', opacity: 0.8, scaleX: 1, traverseHeight: 60 }
+    stage: previousScene ? { ...previousScene.stage } : { type: 'proscenium', color: '#8B4513', width: 600, height: 400, shape: 'ellipse', opacity: 0.8, scaleX: 1, traverseHeight: 60 }
   }
 
   const newScenes = [...scenes.value]
@@ -1135,6 +1300,12 @@ const addNewActor = () => {
 }
 
 const addActorToScene = (actorType) => {
+  // Verificação de segurança para evitar erro quando currentScene não está definido
+  if (!currentScene.value || !currentScene.value.actors || !currentScene.value.objects) {
+    console.warn('Cena atual não está disponível para adicionar ator')
+    return
+  }
+
   const newActor = {
     id: Date.now(),
     name: actorType.name,
@@ -1158,6 +1329,12 @@ const updateStage = (newStageProps) => {
 }
 
 const addObject = (type, x, y) => {
+  // Verificação de segurança para evitar erro quando currentScene não está definido
+  if (!currentScene.value || !currentScene.value.actors || !currentScene.value.objects) {
+    console.warn('Cena atual não está disponível para adicionar objeto')
+    return
+  }
+
   const newObject = {
     id: Date.now(),
     type,
@@ -1176,6 +1353,12 @@ const addObject = (type, x, y) => {
 }
 
 const moveElementLayer = (element, direction) => {
+  // Verificação de segurança para evitar erro quando currentScene não está definido
+  if (!currentScene.value || !currentScene.value.actors || !currentScene.value.objects) {
+    console.warn('Cena atual não está disponível para mover elemento')
+    return
+  }
+
   const newScenes = [...scenes.value]
   const isActorElement = isActor(element)
   const elements = [...newScenes[currentSceneIndex.value].actors, ...newScenes[currentSceneIndex.value].objects]
@@ -1193,6 +1376,12 @@ const moveElementLayer = (element, direction) => {
 }
 
 const deleteElement = (element) => {
+  // Verificação de segurança para evitar erro quando currentScene não está definido
+  if (!currentScene.value || !currentScene.value.actors || !currentScene.value.objects) {
+    console.warn('Cena atual não está disponível para deletar elemento')
+    return
+  }
+
   const newScenes = [...scenes.value]
   const isActorElement = isActor(element)
 
@@ -1219,6 +1408,11 @@ const handleElementMouseDown = (element, e) => {
 
 const handleMouseMove = (e) => {
   if (draggedElement.value && canvas.value) {
+    // Verificação de segurança para evitar erro quando currentScene não está definido
+    if (!currentScene.value || !currentScene.value.stage || !currentScene.value.actors || !currentScene.value.objects) {
+      return
+    }
+
     const rect = canvas.value.getBoundingClientRect()
     const canvasWidth = currentScene.value.stage.width || 600
     const canvasHeight = currentScene.value.stage.height || 400
@@ -1365,54 +1559,183 @@ const handlePanEnd = () => {
 }
 
 const getStageStyle = (stage) => {
+  if (!stage) {
+    return {
+      backgroundColor: '#f0f0f0',
+      opacity: 0.3,
+      position: 'relative',
+      transition: 'all 0.3s ease',
+      display: 'none' // Hide default background since SVG handles the shape
+    }
+  }
+  
+  // Base style without any shape-specific properties
+  // The SVG now handles all the shape rendering
   const baseStyle = {
     backgroundColor: stage.color,
     opacity: stage.opacity || 0.3,
     position: 'relative',
-    transition: 'all 0.3s ease'
+    transition: 'all 0.3s ease',
+    display: 'none' // Hide background div since SVG handles the shape
   }
 
+  return baseStyle
+}
+
+const getCanvasStyle = (stage) => {
+  const baseStyle = {
+    transition: 'all 0.3s ease',
+    overflow: 'visible',
+    position: 'relative'
+  }
+  return baseStyle
+}
+
+const getCanvasShapeElement = (stage) => {
+  if (!stage) return null
+  
+  const width = 100
+  const height = 100
+  const fillColor = stage.color || '#f0f0f0'
+  const opacity = stage.opacity || 0.3
+  
   switch (stage.shape) {
     case 'circle':
-      return { ...baseStyle, borderRadius: '50%' }
+      return {
+        tag: 'circle',
+        attrs: {
+          cx: width / 2,
+          cy: height / 2,
+          r: Math.min(width, height) / 2,
+          fill: fillColor,
+          'fill-opacity': opacity,
+          stroke: '#e5e7eb',
+          'stroke-width': 1
+        }
+      }
     case 'ellipse':
-      return { 
-        ...baseStyle, 
-        borderRadius: '50%', 
-        transform: `scaleX(${stage.scaleX || 1.5})`,
-        transformOrigin: 'center'
+      return {
+        tag: 'ellipse',
+        attrs: {
+          cx: width / 2,
+          cy: height / 2,
+          rx: width / 2,
+          ry: height / 2,
+          fill: fillColor,
+          'fill-opacity': opacity,
+          stroke: '#e5e7eb',
+          'stroke-width': 1
+        }
       }
     case 'hexagon':
-      return { 
-        ...baseStyle, 
-        clipPath: 'polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%)'
+      const hexPoints = [
+        [width * 0.3, 0],
+        [width * 0.7, 0],
+        [width, height * 0.5],
+        [width * 0.7, height],
+        [width * 0.3, height],
+        [0, height * 0.5]
+      ].map(p => p.join(',')).join(' ')
+      return {
+        tag: 'polygon',
+        attrs: {
+          points: hexPoints,
+          fill: fillColor,
+          'fill-opacity': opacity,
+          stroke: '#e5e7eb',
+          'stroke-width': 1
+        }
       }
     case 'octagon':
-      return { 
-        ...baseStyle, 
-        clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)'
+      const octPoints = [
+        [width * 0.3, 0],
+        [width * 0.7, 0],
+        [width, height * 0.3],
+        [width, height * 0.7],
+        [width * 0.7, height],
+        [width * 0.3, height],
+        [0, height * 0.7],
+        [0, height * 0.3]
+      ].map(p => p.join(',')).join(' ')
+      return {
+        tag: 'polygon',
+        attrs: {
+          points: octPoints,
+          fill: fillColor,
+          'fill-opacity': opacity,
+          stroke: '#e5e7eb',
+          'stroke-width': 1
+        }
       }
     case 'thrust':
-      return { 
-        ...baseStyle, 
-        clipPath: 'polygon(0% 20%, 100% 20%, 80% 100%, 20% 100%)',
-        borderRadius: '0 0 20px 20px'
+      const thrustPoints = [
+        [0, height * 0.2],
+        [width, height * 0.2],
+        [width * 0.8, height],
+        [width * 0.2, height]
+      ].map(p => p.join(',')).join(' ')
+      return {
+        tag: 'polygon',
+        attrs: {
+          points: thrustPoints,
+          fill: fillColor,
+          'fill-opacity': opacity,
+          stroke: '#e5e7eb',
+          'stroke-width': 1
+        }
       }
     case 'horseshoe':
-      return { 
-        ...baseStyle, 
-        borderRadius: '50% 50% 0 0', 
-        clipPath: 'polygon(0% 0%, 100% 0%, 100% 70%, 80% 100%, 20% 100%, 0% 70%)'
+      const horseshoePoints = [
+        [0, 0],
+        [width, 0],
+        [width, height * 0.7],
+        [width * 0.8, height],
+        [width * 0.2, height],
+        [0, height * 0.7]
+      ].map(p => p.join(',')).join(' ')
+      return {
+        tag: 'polygon',
+        attrs: {
+          points: horseshoePoints,
+          fill: fillColor,
+          'fill-opacity': opacity,
+          stroke: '#e5e7eb',
+          'stroke-width': 1
+        }
       }
     case 'traverse':
-      return { 
-        ...baseStyle, 
-        height: `${stage.traverseHeight || 60}%`, 
-        top: `${(100 - (stage.traverseHeight || 60)) / 2}%`,
-        borderRadius: '8px'
+      return {
+        tag: 'rect',
+        attrs: {
+          x: 0,
+          y: height * 0.2,
+          width: width,
+          height: height * 0.6,
+          rx: 8,
+          ry: 8,
+          fill: fillColor,
+          'fill-opacity': opacity,
+          stroke: '#e5e7eb',
+          'stroke-width': 1
+        }
       }
+    case 'rectangle':
     default:
-      return baseStyle
+      return {
+        tag: 'rect',
+        attrs: {
+          x: 0,
+          y: 0,
+          width: width,
+          height: height,
+          rx: 8,
+          ry: 8,
+          fill: fillColor,
+          'fill-opacity': opacity,
+          stroke: '#e5e7eb',
+          'stroke-width': 1
+        }
+      }
   }
 }
 
@@ -1490,6 +1813,14 @@ const loadFlow = () => {
 }
 
 const getStagePreviewStyle = (stage) => {
+  if (!stage) {
+    return {
+      backgroundColor: '#f0f0f0',
+      opacity: 0.3,
+      border: '1px solid #ccc'
+    }
+  }
+  
   const baseStyle = {
     backgroundColor: stage.color,
     opacity: stage.opacity || 0.3,
@@ -1519,7 +1850,7 @@ const getStagePreviewStyle = (stage) => {
 const resetStageToDefault = () => {
   const newScenes = [...scenes.value]
   newScenes[currentSceneIndex.value].stage = {
-    shape: 'rectangle',
+    shape: 'ellipse',
     color: '#8B4513',
     width: 600,
     height: 400,
@@ -1535,8 +1866,58 @@ const exportFlow = () => {
   saveFlow()
 }
 
+// AutoSave methods
+const handleManualSave = async () => {
+  try {
+    await saveNow(projectData.value)
+    console.log('Projeto salvo manualmente com sucesso!')
+  } catch (error) {
+    console.error('Erro ao salvar projeto manualmente:', error)
+  }
+}
+
+// Load project from API
+const handleLoadProject = async (projectId) => {
+  try {
+    const project = await loadProject(projectId)
+    if (project.data && project.data.scenes) {
+      scenes.value = project.data.scenes
+      currentSceneIndex.value = 0
+      selectedElement.value = null
+      
+      // Restore settings if available
+      if (project.data.settings) {
+        zoom.value = project.data.settings.zoom || 100
+        canvasOffset.value = project.data.settings.canvasOffset || { x: 0, y: 0 }
+      }
+    }
+    console.log('Projeto carregado com sucesso!')
+  } catch (error) {
+    console.error('Erro ao carregar projeto:', error)
+    alert('Erro ao carregar projeto: ' + (error.response?.data?.message || error.message))
+  }
+}
+
+// List user projects
+const handleListProjects = async () => {
+  try {
+    const projects = await listProjects()
+    console.log('Projetos disponíveis:', projects)
+    return projects
+  } catch (error) {
+    console.error('Erro ao listar projetos:', error)
+    return []
+  }
+}
+
 const addSpeechBubble = () => {
   if (selectedActorType.value && speechText.value.trim()) {
+    // Verificação de segurança para evitar erro quando currentScene não está definido
+    if (!currentScene.value || !currentScene.value.actors) {
+      console.warn('Cena atual não está disponível para adicionar fala')
+      return
+    }
+
     const newScenes = [...scenes.value]
     const actorIndex = newScenes[currentSceneIndex.value].actors.findIndex(a => a.id === selectedActorType.value.id)
     if (actorIndex !== -1) {
@@ -1561,6 +1942,12 @@ const editSpeechBubble = (actor) => {
 }
 
 const removeSpeechBubble = (actor) => {
+  // Verificação de segurança para evitar erro quando currentScene não está definido
+  if (!currentScene.value || !currentScene.value.actors) {
+    console.warn('Cena atual não está disponível para remover fala')
+    return
+  }
+
   const newScenes = [...scenes.value]
   const actorIndex = newScenes[currentSceneIndex.value].actors.findIndex(a => a.id === actor.id)
   if (actorIndex !== -1) {
@@ -1585,6 +1972,36 @@ const resetSpeechDialog = () => {
 
 const cancelSpeechDialog = () => {
   resetSpeechDialog()
+}
+
+// Projects dialog functions
+const openProjectsDialog = async () => {
+  showProjectsDialog.value = true
+  loadingProjects.value = true
+  
+  try {
+    const projects = await listProjects()
+    availableProjects.value = projects
+  } catch (error) {
+    console.error('Erro ao carregar projetos:', error)
+    availableProjects.value = []
+  } finally {
+    loadingProjects.value = false
+  }
+}
+
+const closeProjectsDialog = () => {
+  showProjectsDialog.value = false
+  availableProjects.value = []
+}
+
+const selectProject = async (project) => {
+  try {
+    await handleLoadProject(project.id)
+    closeProjectsDialog()
+  } catch (error) {
+    console.error('Erro ao carregar projeto:', error)
+  }
 }
 
 // Collision detection function
@@ -1641,11 +2058,32 @@ const checkCollision = (newPosition, currentElement, scene) => {
 }
 
 // Event listeners
-onMounted(() => {
+onMounted(async () => {
   document.addEventListener('mousemove', handleMouseMove)
   document.addEventListener('mouseup', handleMouseUp)
   document.addEventListener('mousemove', handlePanMove)
   document.addEventListener('mouseup', handlePanEnd)
+  
+  // Setup autosave watcher
+  watchForChanges(projectData, {
+    immediate: false,
+    deep: true
+  })
+  
+  // Load project from initialProjectId prop if provided
+  if (props.initialProjectId) {
+    try {
+      console.log('Carregando projeto do prop initialProjectId:', props.initialProjectId)
+      await handleLoadProject(props.initialProjectId)
+    } catch (error) {
+      console.error('Erro ao carregar projeto do prop:', error)
+    }
+  } else {
+    // Load project from URL if present (fallback)
+    await loadProjectFromURL()
+  }
+  
+  console.log('Theatre Flux Editor iniciado com autosave ativo')
 })
 
 // Side Panel Functions
