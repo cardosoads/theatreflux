@@ -7,6 +7,7 @@ import PropertiesPanel from './components/PropertiesPanel.vue';
 import AnimationTimeline from './components/AnimationTimeline.vue';
 import TestPropertiesPanel from './components/TestPropertiesPanel.vue';
 import DashboardManager from './components/DashboardManager.vue';
+import ShadcnTestComponent from './components/ShadcnTestComponent.vue';
 
 const app = createApp({});
 
@@ -16,5 +17,6 @@ app.component('properties-panel', PropertiesPanel);
 app.component('animation-timeline', AnimationTimeline);
 app.component('test-properties-panel', TestPropertiesPanel);
 app.component('dashboard-manager', DashboardManager);
+app.component('shadcn-test-component', ShadcnTestComponent);
 
 app.mount('#app');

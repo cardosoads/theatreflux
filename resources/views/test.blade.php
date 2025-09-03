@@ -61,6 +61,16 @@
                     </div>
                 </div>
 
+                <!-- Shadcn UI Test Section -->
+                <div class="mb-8">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-xl font-semibold mb-4">Shadcn UI Components Test</h3>
+                        <div class="border rounded-lg p-4">
+                            <shadcn-test-component></shadcn-test-component>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Test Components -->
                 <div class="max-w-2xl mx-auto">
                     <!-- Test Properties Panel -->
