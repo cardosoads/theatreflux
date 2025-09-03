@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="bg-white border-b border-gray-300 px-4 py-2 flex items-center justify-between">
       <div class="flex items-center gap-4">
-        <h1 class="text-lg font-semibold text-gray-800">Theatre Flux</h1>
+        <h1 class="text-lg font-semibold text-gray-800">{{ projectTitle }}</h1>
         <div class="flex gap-2">
           <button 
             @click="toggleSidePanel"
@@ -1070,10 +1070,11 @@ const showSidePanel = ref(false)
 const showProjectsDialog = ref(false)
 const availableProjects = ref([])
 const loadingProjects = ref(false)
+const projectTitle = ref('Theatre Flux')
 
 // Project data for autosave
 const projectData = computed(() => ({
-  title: 'Projeto Theatre Flux',
+  title: projectTitle.value,
   description: 'Projeto criado no Theatre Flux Editor',
   scenes: scenes.value.map((scene, index) => ({
     ...scene,
@@ -1801,6 +1802,9 @@ const loadFlow = () => {
             scenes.value = flowData.scenes
             currentSceneIndex.value = 0
             selectedElement.value = null
+            
+            // Set project title from loaded data
+            projectTitle.value = flowData.title || flowData.projectName || 'Theatre Flux'
           }
         } catch (error) {
           alert('Erro ao carregar arquivo: ' + error.message)
@@ -1884,6 +1888,9 @@ const handleLoadProject = async (projectId) => {
       scenes.value = project.data.scenes
       currentSceneIndex.value = 0
       selectedElement.value = null
+      
+      // Set project title
+      projectTitle.value = project.title || project.data.title || 'Theatre Flux'
       
       // Restore settings if available
       if (project.data.settings) {

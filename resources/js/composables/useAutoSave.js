@@ -38,26 +38,56 @@ export function useAutoSave(options = {}) {
       isSaving.value = true
       saveError.value = null
 
+      // Ensure we have at least one scene
+      const scenesToSave = projectData.scenes && projectData.scenes.length > 0 
+        ? projectData.scenes 
+        : [{
+            id: Date.now(),
+            name: 'Cena 1',
+            actors: [],
+            objects: [],
+            stage: {
+              type: 'proscenium',
+              color: '#8B4513',
+              width: 600,
+              height: 400,
+              shape: 'ellipse',
+              opacity: 0.8,
+              scaleX: 1,
+              traverseHeight: 60
+            },
+            order: 0
+          }]
+
       const payload = {
         title: projectData.title || 'Projeto sem título',
         description: projectData.description || '',
         data: {
-          scenes: projectData.scenes || [],
+          scenes: scenesToSave,
           settings: projectData.settings || {},
           version: '2.0'
         },
         settings: projectData.globalSettings || {},
-        scenes: projectData.scenes?.map(scene => ({
+        scenes: scenesToSave.map(scene => {
+        const sceneData = {
           name: scene.name,
           description: scene.description || '',
-          order: scene.order || 0,
+          order: scene.order,
           data: {
             actors: scene.actors || [],
             objects: scene.objects || [],
             stage: scene.stage || {}
           },
           stage_config: scene.stage || {}
-        })) || []
+        }
+        
+        // Only include ID if it's a valid existing scene ID (not a timestamp)
+        if (scene.id && scene.id < 1000000000000) {
+          sceneData.id = scene.id
+        }
+        
+        return sceneData
+      })
       }
 
       let response

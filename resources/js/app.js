@@ -6,6 +6,7 @@ import TheatreFlowEditor from './components/TheatreFlowEditor.vue';
 import PropertiesPanel from './components/PropertiesPanel.vue';
 import AnimationTimeline from './components/AnimationTimeline.vue';
 import TestPropertiesPanel from './components/TestPropertiesPanel.vue';
+import DashboardManager from './components/DashboardManager.vue';
 
 const app = createApp({});
 
@@ -14,5 +15,6 @@ app.component('theatre-flow-editor', TheatreFlowEditor);
 app.component('properties-panel', PropertiesPanel);
 app.component('animation-timeline', AnimationTimeline);
 app.component('test-properties-panel', TestPropertiesPanel);
+app.component('dashboard-manager', DashboardManager);
 
 app.mount('#app');
